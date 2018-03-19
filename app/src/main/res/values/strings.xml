@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Notes</string>
+    <string name="content">Type here</string>
+    <string name="title">Title</string>
+    <string name="confirm">are you sure?</string>
+    <string name="appName">My Notes</string>
+</resources>
