@@ -1,6 +1,5 @@
 package com.example.roufy235.mynotes
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
