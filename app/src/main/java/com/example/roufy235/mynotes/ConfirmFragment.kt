@@ -16,18 +16,18 @@ class ConfirmFragment: DialogFragment(){
     var noteId: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var myView = inflater!!.inflate(R.layout.delete, container, false)
+        val myView = inflater!!.inflate(R.layout.delete, container, false)
 
 
-        var yesButton = myView.findViewById<Button>(R.id.buYes)
-        var noButton = myView.findViewById<Button>(R.id.buNo)
+        val yesButton = myView.findViewById<Button>(R.id.buYes)
+        val noButton = myView.findViewById<Button>(R.id.buNo)
 
-        noButton.setOnClickListener(View.OnClickListener {
+        noButton.setOnClickListener{
             this.dismiss()
-        })
+        }
 
-        yesButton.setOnClickListener(View.OnClickListener {
-            var ma = activity as MainActivity
+        yesButton.setOnClickListener {
+            val ma = activity as MainActivity
 
             myView.layoutHide.visibility = View.GONE
             myView.progressBar.visibility = View.VISIBLE
@@ -35,7 +35,7 @@ class ConfirmFragment: DialogFragment(){
             ma.deleteNote(noteId!!)
 
             this.dismiss()
-        })
+        }
 
         return myView
     }

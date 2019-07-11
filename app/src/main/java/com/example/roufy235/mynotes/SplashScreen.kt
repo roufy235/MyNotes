@@ -1,13 +1,12 @@
 package com.example.roufy235.mynotes
 
 import android.content.Intent
-import android.content.SharedPreferences
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 
-class splashScreen : AppCompatActivity() {
+class SplashScreen : AppCompatActivity() {
 
 
     var timeOut = 2000
@@ -19,13 +18,13 @@ class splashScreen : AppCompatActivity() {
         val new = prefs.getBoolean("new", false)
 
         if (new){
-            val mainActivity = Intent(this@splashScreen, MainActivity::class.java)
+            val mainActivity = Intent(this@SplashScreen, MainActivity::class.java)
             startActivity(mainActivity)
             finish()
         }else{
             prefs.edit().putBoolean("new", true).apply()
             Handler().postDelayed({
-                val mainActivity = Intent(this@splashScreen, MainActivity::class.java)
+                val mainActivity = Intent(this@SplashScreen, MainActivity::class.java)
                 startActivity(mainActivity)
                 finish()
             }, timeOut.toLong())

@@ -1,9 +1,10 @@
 package com.example.roufy235.mynotes
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.BaseAdapter
@@ -14,9 +15,9 @@ import kotlinx.android.synthetic.main.notes_tickets.view.*
 
 class MainActivity : AppCompatActivity() {
 
-    var noteList = ArrayList<Notes>()
+    private var noteList = ArrayList<Notes>()
 
-    var adapter: NotesListAdapter? = null
+    private var adapter: NotesListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +52,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         if (item != null){
             when(item.itemId){
                 R.id.addNotes -> {
-                    var intent = Intent(this, AddNotes::class.java)
+                    val intent = Intent(this, AddNotes::class.java)
                     startActivity(intent)
                 }else -> {}
             }
@@ -82,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         val selectionArgs = arrayOf(title)
 
         noteList.clear()
-        var cursor = database.Query(projection, "Title LIKE ?", selectionArgs, "Title")
+        val cursor = database.query(projection, "Title LIKE ?", selectionArgs, "Title")
 
         if (cursor.moveToFirst()){
             do {
@@ -103,65 +102,59 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    inner class NotesListAdapter: BaseAdapter{
-        var noteList:ArrayList<Notes>? = null
-        var context: Context? = null
+    inner class NotesListAdapter(context : Context, list : ArrayList<Notes>) : BaseAdapter() {
+        var noteList:ArrayList<Notes>? = list
+        var context: Context? = context
 
-        constructor(context: Context, list: ArrayList<Notes>){
-            this.context = context
-            this.noteList = list
-        }
-
+        @SuppressLint("ViewHolder")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var firstNote = this.noteList!![position]
+            val firstNote = this.noteList!![position]
 
             val inflater = this.context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
             val myView = inflater.inflate(R.layout.notes_tickets, null)
 
-            myView.noteDes.setOnClickListener(View.OnClickListener {
-                var intent = Intent(this.context!!, ViewNotes::class.java)
+            myView.noteDes.setOnClickListener{
+                val intent = Intent(this.context!!, ViewNotes::class.java)
 
                 intent.putExtra("Title", firstNote.noteTitle)
                 intent.putExtra("Des", firstNote.noteContent)
                 intent.putExtra("Date", firstNote.noteDate)
 
                 this.context!!.startActivity(intent)
-            })
+            }
 
 
-            myView.imageViewDelete.setOnClickListener(View.OnClickListener {
-                var confirmPop = ConfirmFragment()
+            myView.imageViewDelete.setOnClickListener{
+                val confirmPop = ConfirmFragment()
                 confirmPop.noteId = firstNote.noteId
-                var fm = fragmentManager
+                val fm = fragmentManager
 
                 confirmPop.show(fm, "Confirm")
-            })
-
-            myView.noteTitle.setOnClickListener(View.OnClickListener {
-                var intent = Intent(this.context!!, ViewNotes::class.java)
+            }
+            myView.noteTitle.setOnClickListener{
+                val intent = Intent(this.context!!, ViewNotes::class.java)
 
                 intent.putExtra("Title", firstNote.noteTitle)
                 intent.putExtra("Des", firstNote.noteContent)
                 intent.putExtra("Date", firstNote.noteDate)
 
                 this.context!!.startActivity(intent)
-            })
+            }
 
-            myView.imageViewEdit.setOnClickListener(View.OnClickListener {
-                var intent = Intent(this.context, AddNotes::class.java)
+            myView.imageViewEdit.setOnClickListener{
+                val intent = Intent(this.context, AddNotes::class.java)
                 intent.putExtra("title", firstNote.noteTitle)
                 intent.putExtra("des", firstNote.noteContent)
                 intent.putExtra("id", firstNote.noteId)
-
                 this.context!!.startActivity(intent)
-            })
+            }
 
             myView.noteTitle.text = firstNote.noteTitle
 
 
             var max = 162
-            var str: String? = null
+            val str : String?
             if (firstNote.noteContent!!.length <= max){
                 max = firstNote.noteContent!!.length
 
@@ -195,11 +188,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun deleteNote(index: Int){
-        var db = DbManager(this)
+        val db = DbManager(this)
 
-        var selectionArgs = arrayOf(index.toString())
+        val selectionArgs = arrayOf(index.toString())
 
-        var id = db.Delete("Id = ?", selectionArgs)
+        val id = db.delete("Id = ?", selectionArgs)
 
         if (id > 0){
             Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show()

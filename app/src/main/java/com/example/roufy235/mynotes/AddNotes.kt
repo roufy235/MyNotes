@@ -1,7 +1,7 @@
 package com.example.roufy235.mynotes
 
 import android.content.ContentValues
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -21,9 +21,8 @@ class AddNotes : AppCompatActivity() {
 
         database = DbManager(this)
         try {
-            var myData: Bundle = intent.extras
-
-            id = myData.getInt("id", 0)
+            val myData: Bundle? = intent.extras
+            id = myData!!.getInt("id", 0)
             if (id != 0){
                 name = "Edit Note"
                 addTitle.setText(myData.getString("title"))
@@ -45,8 +44,8 @@ class AddNotes : AppCompatActivity() {
         if (item != null){
             when(item.itemId){
                 R.id.checkAddNote -> {
-                    var title = addTitle.text.toString()
-                    var content = addContent.text.toString()
+                    val title = addTitle.text.toString()
+                    val content = addContent.text.toString()
 
                     if (title.isNotEmpty() && content.isNotEmpty()){
                         insert(title, content)
@@ -61,31 +60,29 @@ class AddNotes : AppCompatActivity() {
     }
 
 
-    fun insert(title: String, content: String){
+    private fun insert(title: String, content: String){
 
-        var date = SimpleDateFormat("dd / MM / YYYY").format(Date())
-        var values = ContentValues()
+        val date = SimpleDateFormat("dd / MM / YYYY", Locale.ENGLISH).format(Date())
+        val values = ContentValues()
         values.put("Title", title)
         values.put("Content", content)
         values.put("Date", date)
 
         if (id == 0){
-            val id = database!!.Insert(values)
-            if (id > 0){
+            val id = database!!.insert(values)
+            if (id > 0) {
                 Toast.makeText(this, "Note Added", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 Toast.makeText(this, "Unable to add note", Toast.LENGTH_SHORT).show()
             }
         }else{
-            val id = database!!.Update(values, "Id = ?", arrayOf(id.toString()))
+            val id = database!!.update(values, "Id = ?", arrayOf(id.toString()))
             if (id > 0){
                 Toast.makeText(this, "Note Updated", Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(this, "Unable to update note", Toast.LENGTH_SHORT).show()
             }
         }
-
-
         finish()
     }
 }
